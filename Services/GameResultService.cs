@@ -6,9 +6,9 @@ namespace GameResultsApi.Services
 {
     public class GameResultService
     {
-        private readonly InMemoryDbContext _context;
+        private readonly MongoDbContext _context;
 
-        public GameResultService(InMemoryDbContext context)
+        public GameResultService(MongoDbContext context)
         {
             _context = context;
         }
