@@ -1,0 +1,41 @@
+﻿name: Build e Deploy com ArgoCD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Login no Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build da imagem
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/loteria:latest .
+
+      - name: Push da imagem
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/loteria:latest
+
+      - name: Clonar repositório de infraestrutura
+        uses: actions/checkout@v3
+        with:
+          repository: isaque/infra-deploy
+          token: ${{ secrets.LOTERIA_TOKEN }}
+          path: infra
+
+      - name: Atualizar tag da imagem no deployment.yaml
+        run: |
+          sed -i 's|image: .*|image: ${{ secrets.DOCKER_USERNAME }}/loteria:latest|' infra/k8s/loteria/deployment.yaml
+
+      - name: Commit e push
+        run: |
+          cd infra
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Atualiza imagem para latest"
+          git push

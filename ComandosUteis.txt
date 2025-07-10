@@ -1,1 +1,5 @@
 ﻿dotnet run --environment Development
+
+docker run --rm -p 80:80 sueliopontes/loteria:lasted
+
+docker build -t sueliopontes/loteria:lasted
