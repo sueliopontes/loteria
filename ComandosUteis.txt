@@ -27,6 +27,7 @@ git config --global user.signingkey 4D54F4B3105E0547
 git config commit.gpgsign true
 
 gpg --armor --export 4D54F4B3105E0547
+teste
 
 
 
