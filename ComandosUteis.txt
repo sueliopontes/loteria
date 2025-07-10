@@ -3,3 +3,20 @@
 docker run --rm -p 80:80 sueliopontes/loteria:lasted
 
 docker build -t sueliopontes/loteria:lasted
+
+# Para a conta pessoal
+ssh-keygen -t ed25519 -C "suelio.pontes@hotmail.com" -f ~/.ssh/id_ed25519_pessoal
+
+# Para a conta de trabalho
+ssh-keygen -t ed25519 -C "suelio.pontes@signainfo.com.br" -f ~/.ssh/id_ed25519_trabalho
+ssh-keygen -t ed25519 -C "suelio.pontes@signainfo.com.br" -f ~/id_ed25519_trabalho
+
+eval "$(ssh-agent -s)"
+ssh-add id_ed25519_pessoal
+ssh-add id_ed25519_signa
+
+git remote set-url origin git@github-pessoal:usuario/repositorio.git
+git remote set-url origin git@github-signa:usuario/repositorio.git
+
+git remote set-url origin git@github-pessoal:sueliopontes/loteria.git
+

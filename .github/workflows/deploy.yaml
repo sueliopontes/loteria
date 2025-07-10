@@ -23,9 +23,10 @@ jobs:
       - name: Clonar repositório de infraestrutura
         uses: actions/checkout@v3
         with:
-          repository: isaque/infra-deploy
+          repository: sueliopontes/loteria-infra-deploy
           token: ${{ secrets.LOTERIA_TOKEN }}
           path: infra
+          persist-credentials: false  # <- importante para evitar conflitos
 
       - name: Atualizar tag da imagem no deployment.yaml
         run: |
@@ -37,5 +38,5 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "Atualiza imagem para latest"
-          git push
+          git commit -m "Atualiza imagem para latest" || echo "Nada para commitar"
+          git push https://x-access-token:${{ secrets.LOTERIA_TOKEN }}@github.com/sueliopontes/loteria-infra-deploy.git HEAD:main
