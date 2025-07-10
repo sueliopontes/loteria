@@ -20,3 +20,13 @@ git remote set-url origin git@github-signa:usuario/repositorio.git
 
 git remote set-url origin git@github-pessoal:sueliopontes/loteria.git
 
+
+git config user.name Suelio Pontes
+git config user.email suelio.pontes@hotmail.com
+git config --global user.signingkey 4D54F4B3105E0547
+git config commit.gpgsign true
+
+gpg --armor --export 4D54F4B3105E0547
+
+
+
