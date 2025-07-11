@@ -36,7 +36,7 @@ jobs:
 
       - name: Atualizar tag da imagem no deployment.yaml
         run: |
-          sed -i 's|image: .*|image: ${{ secrets.DOCKER_USERNAME }}/loteria:${{ env.IMAGE_TAG }}|' k8s/dev/deployment.yaml
+          sed -i 's|image: .*|image: ${{ secrets.DOCKER_USERNAME }}/loteria:${{ env.IMAGE_TAG }}|' infra/k8s/dev/deployment.yaml
 
       - name: Commit e push
         run: |
