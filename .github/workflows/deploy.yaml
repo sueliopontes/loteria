@@ -25,12 +25,12 @@ jobs:
         with:
           repository: sueliopontes/loteria-infra-deploy
           token: ${{ secrets.LOTERIA_TOKEN }}
-          path: k8s
+          path: infra
           persist-credentials: false  # <- importante para evitar conflitos
 
       - name: Atualizar tag da imagem no deployment.yaml
         run: |
-          sed -i 's|image: .*|image: ${{ secrets.DOCKER_USERNAME }}/loteria:latest|' dev/deployment.yaml
+          sed -i 's|image: .*|image: ${{ secrets.DOCKER_USERNAME }}/loteria:latest|' infra/k8s/dev/deployment.yaml
 
       - name: Commit e push
         run: |
