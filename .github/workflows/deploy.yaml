@@ -34,7 +34,7 @@ jobs:
 
       - name: Commit e push
         run: |
-          cd k8s
+          cd infra
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
