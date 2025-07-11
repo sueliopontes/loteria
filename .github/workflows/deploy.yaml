@@ -21,10 +21,10 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build da imagem
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/loteria:${{ env.IMAGE_TAG }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/loteria .
 
       - name: Push da imagem
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/loteria:${{ env.IMAGE_TAG }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/loteria
 
       - name: Clonar repositório de infraestrutura
         uses: actions/checkout@v3
@@ -33,10 +33,22 @@ jobs:
           token: ${{ secrets.LOTERIA_TOKEN }}
           path: infra
           persist-credentials: false
+      
+      - name: Build da imagem
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/loteria . 
 
-      - name: Atualizar tag da imagem no deployment.yaml
+      - name: Push da imagem
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/loteria
+
+      - name: Obter digest da imagem
+        id: digest
         run: |
-          sed -i 's|image: .*|image: ${{ secrets.DOCKER_USERNAME }}/loteria:${{ env.IMAGE_TAG }}|' infra/k8s/dev/deployment.yaml
+          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKER_USERNAME }}/loteria)
+          echo "IMAGE_DIGEST=$DIGEST" >> $GITHUB_ENV
+
+      - name: Atualizar imagem no deployment.yaml com digest
+        run: |
+          sed -i 's|image: .*|image: '"${{ env.IMAGE_DIGEST }}"'|' infra/k8s/dev/deployment.yaml      
 
       - name: Commit e push
         run: |
